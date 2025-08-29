@@ -80,7 +80,7 @@ set(MINIMUM_LEPTONICA_VERSION 1.74)
 message(STATUS "Configuring tesseract version ${PACKAGE_VERSION}...")
 
 if(WIN32)
-  option(SW_BUILD "Build with sw" ON)
+  option(SW_BUILD "Build with sw" OFF)  # Disabled SW to avoid dependency issues
 else()
   option(SW_BUILD "Build with sw" OFF)
 endif()
@@ -428,21 +428,22 @@ endif()
 # ##############################################################################
 include(CheckFunctions)
 
-if(SW_BUILD)
-  find_package(SW REQUIRED)
-  if(BUILD_SHARED_LIBS)
-    set(SW_BUILD_SHARED_LIBS 1)
-  else()
-    set(SW_BUILD_SHARED_LIBS 0)
-  endif()
-  sw_add_package(org.sw.demo.danbloomberg.leptonica
-                 org.sw.demo.libarchive.libarchive)
-  if(BUILD_TRAINING_TOOLS)
-    sw_add_package(org.sw.demo.gnome.pango.pangocairo
-                   org.sw.demo.unicode.icu.i18n)
-  endif()
-  sw_execute()
-else()
+# SW_BUILD section commented out to avoid dependency issues
+# if(SW_BUILD)
+#   find_package(SW REQUIRED)
+#   if(BUILD_SHARED_LIBS)
+#     set(SW_BUILD_SHARED_LIBS 1)
+#   else()
+#     set(SW_BUILD_SHARED_LIBS 0)
+#   endif()
+#   sw_add_package(org.sw.demo.danbloomberg.leptonica
+#                  org.sw.demo.libarchive.libarchive)
+#   if(BUILD_TRAINING_TOOLS)
+#     sw_add_package(org.sw.demo.gnome.pango.pangocairo
+#                    org.sw.demo.unicode.icu.i18n)
+#   endif()
+#   sw_execute()
+# else()
   find_package(PkgConfig)
   if(APPLE)
     if(DEFINED ENV{HOMEBREW_PREFIX})
@@ -516,7 +517,7 @@ else()
       include_directories(${CURL_INCLUDE_DIRS})
     endif(CURL_FOUND)
   endif(DISABLE_CURL)
-endif()
+# endif() # End of SW_BUILD section - commented out
 
 # ##############################################################################
 #
